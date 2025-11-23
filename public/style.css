@@ -838,6 +838,7 @@ body:not(.dark-mode) section h2 {
     width: 200px;
     height: 200px;
     border-radius: 50%;
+    margin-top: 20px;
     object-fit: cover;
     border: 5px solid var(--primary-color);
     margin-bottom: 20px;
@@ -1757,8 +1758,10 @@ html.dark-theme .image-placeholder {
 }
 
 @media (max-width: 768px) {
-    .leadership-section {
-        padding: 3rem 0;
+    .hero-content {
+        padding: 20px 15px;
+        justify-content: center;
+        min-height: calc(100vh - 100px);
     }
     
     .leadership-section .container {
@@ -2802,19 +2805,16 @@ html.dark-theme .contact-form-full select {
 html.dark-theme .contact-form-full input:focus,
 html.dark-theme .contact-form-full textarea:focus,
 html.dark-theme .contact-form-full select:focus {
-border-color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 html.dark-theme .contact-info .info-item a {
-color: var(--light-text-color);
+    color: var(--light-text-color);
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-.contact-form-wrapper {
-grid-template-columns: 1fr;
-gap: 30px;
-}
+    .contact-form-wrapper {
         grid-template-columns: 1fr;
         gap: 30px;
     }
@@ -2946,8 +2946,19 @@ gap: 30px;
 
     .container { padding: 0 20px; }
 
-    .hero { padding: 60px 0; min-height: 420px; }
-    .profile-pic { width: 140px; height: 140px; }
+    .hero { 
+        padding: 60px 0 30px; 
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+    }
+    .profile-pic { 
+        width: 160px; 
+        height: 160px;
+        margin: 0 auto 20px;
+        object-fit: cover;
+        border: 4px solid var(--primary-color);
+    }
     .hero h1 { font-size: 2.4em; }
     .hero h2 { font-size: 1.4em; }
     .tagline { font-size: 1em; }
@@ -2988,7 +2999,13 @@ gap: 30px;
     .hero h2 { font-size: 1.1em; }
     .tagline { font-size: 0.95em; }
 
-    .profile-pic { width: 120px; height: 120px; }
+    .profile-pic { 
+        width: 140px; 
+        height: 140px;
+        margin: 0 auto 15px;
+        object-fit: cover;
+        border: 3px solid var(--primary-color);
+    }
 
     .about-text p { font-size: 1em; }
 
