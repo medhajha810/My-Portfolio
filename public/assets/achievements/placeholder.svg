@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect width="800" height="600" fill="#f0f7ff"/>
+    <rect x="200" y="100" width="400" height="300" rx="20" fill="#e0f0ff" stroke="#a0c8ff" stroke-width="2" stroke-dasharray="8 4"/>
+    <path d="M300 250C300 223.49 321.49 202 348 202H452C478.51 202 500 223.49 500 250V350C500 376.51 478.51 398 452 398H348C321.49 398 300 376.51 300 350V250Z" fill="#fff" stroke="#a0c8ff" stroke-width="2" stroke-dasharray="8 4"/>
+    <path d="M400 300C400 277.909 417.909 260 440 260C462.091 260 480 277.909 480 300C480 322.091 462.091 340 440 340C417.909 340 400 322.091 400 300Z" fill="#fff" stroke="#a0c8ff" stroke-width="2" stroke-dasharray="8 4"/>
+    <path d="M440 320C426.193 320 415 308.807 415 295C415 281.193 426.193 270 440 270C453.807 270 465 281.193 465 295C465 308.807 453.807 320 440 320Z" fill="#e0f0ff" stroke="#a0c8ff" stroke-width="2" stroke-dasharray="8 4"/>
+    <path d="M440 300C437.791 300 436 298.209 436 296C436 293.791 437.791 292 440 292C442.209 292 444 293.791 444 296C444 298.209 442.209 300 440 300Z" fill="#a0c8ff"/>
+    <text x="400" y="450" font-family="Arial" font-size="24" text-anchor="middle" fill="#a0c8ff">Achievement Image</text>
+</svg>

@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medha Jha - Data Science Engineer</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-functions-compat.js"></script>
+
+    <style>
+    /* 1. Root Variables (Darker, Cleaner Palette) */
+    :root {
+        /* Light Mode Defaults */
+        --primary-color: #0077B6; /* Deep Ocean Blue */
+        --accent-color: #36C5F0; /* Brighter Blue for Highlights */
+        --background-color: #F8F9FA; /* Off-White Body Background */
+        --section-bg-dark: #F0F2F5; /* Light Gray for alternating sections */
+        --dark-text-color: #1F2937; /* Navy Blue/Black Text */
+        --light-text-color: #FFFFFF; /* Bright White for dark backgrounds */
+        --card-bg: white;
+        --footer-bg: #111827; /* Very Dark Navy Footer */
+        --font-size-base: 1rem;
+        --font-size-small: 0.95rem;
+        --error-color: #cc0000; /* Red for delete/errors */
+    }
+
+    /* THEME TOGGLE STYLES - DARK MODE SETUP */
+    /* Applying dark-theme variables directly to the HTML element (via JS class manipulation) */
+    html.dark-theme {
+        --primary-color: #36C5F0; /* Sky Blue (Primary color in dark mode) */
+        --accent-color: #0077B6; 
+        --background-color: #121212; /* Dark Background */
+        --section-bg-dark: #1F1F1F; /* Slightly Lighter Dark for alternating sections */
+        --dark-text-color: #E0E0E0; /* Light Gray Text for body copy */
+        --light-text-color: #FFFFFF; /* Retain Bright White for maximum contrast */
+        --card-bg: #1F1F1F;
+        --footer-bg: #000000;
+        --error-color: #FF5555; /* Lighter red for delete/errors */
+    }
+    
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: var(--dark-text-color);
+        background-color: var(--background-color); 
+        font-size: var(--font-size-base);
+        /* Dynamic Background Pattern (Subtle dots) */
+        background-image: radial-gradient(#E5E7EB 1px, transparent 0);
+        background-size: 25px 25px;
+        background-attachment: fixed;
+    }
+
+    html.dark-theme body {
+        /* Adjusting pattern color for dark mode */
+        background-image: radial-gradient(#303030 1px, transparent 0);
+    }
+
+    /* NEW/MODIFIED: Container for consistent max-width and side padding on all sections */
+    .container {
+        max-width: 1200px; 
+        margin: 0 auto; 
+        padding: 0 25px; 
+    }
+    /* Special handling for the .about-grid which is an immediate child of .container */
+    .about-section .container.about-grid {
+        padding: 0 25px; 
+    }
+
+    /* 2. Header Background and Font Fixes */
+    .hero {
+        height: 90vh; 
+        background: linear-gradient(135deg, rgba(0, 119, 182, 0.95), rgba(0, 50, 75, 0.95)), url('assets/hero_cover_placeholder.JPG') no-repeat center center/cover;
+    }
+    
+    /* CRITICAL FIX: Use !important to force the heading color to bright white */
+    .hero h1, .hero h2 {
+        color: var(--light-text-color) !important; 
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.9); /* Adds a subtle glow/shadow to help visibility */
+    }
+    /* Use light text color for the tagline as well */
+    .hero .tagline {
+        color: var(--light-text-color) !important;
+    }
+
+    /* 3. General Layout and Alignment */
+    .section {
+        padding: 80px 0; 
+    }
+    
+    /* ---------------------------------------------------- */
+    /* FIX: Section Headings (H2) - Apply Dark Mode Color */
+    /* ---------------------------------------------------- */
+    h2 {
+        font-size: 1.8rem;
+        color: var(--primary-color); 
+        border-left: none !important; 
+        padding-left: 0 !important;
+        margin-bottom: 20px;
+        text-align: center; 
+    }
+
+    /* Force H2 in Dark Mode to use the light text color for visibility against dark backgrounds */
+    html.dark-theme h2:not(.footer h2) {
+        color: var(--dark-text-color) !important; /* Light gray for main section titles */
+    }
+    
+    .section-subtitle {
+        font-size: 1rem;
+        text-align: center; 
+        margin-bottom: 40px;
+    }
+
+    /* FIX: Sub-headings (H3) */
+    .key-achievements h3 {
+          font-size: 1.25rem;
+          border-left: 5px solid var(--primary-color);
+          padding-left: 15px;
+          text-align: left;
+          color: var(--primary-color);
+          margin-bottom: 15px;
+          margin-top: 15px;
+    }
+
+    /* FIX: Headings (h3) inside skill/education/project cards etc. */
+    .experience-card h3, .project-card h3, .education-card h3, .skills-category h3 {
+          color: var(--primary-color); /* Use primary color (bright blue in dark mode) for card titles */
+    }
+    
+    /* 4. About Me Font Reduction */
+    .about-section .about-text p {
+        font-size: var(--font-size-small);
+    }
+    
+    /* 5. Skills & Education Grid */
+    .skills-education-grid {
+        display: flex;
+        flex-direction: column; 
+        gap: 60px; 
+    }
+
+    #skills-list .skills-grid-container {
+          display: grid;
+          grid-template-columns: 1fr 1fr; 
+          gap: 30px;
+    }
+    
+    /* Alternating section background color */
+    .light-bg {
+        background-color: var(--section-bg-dark);
+    }
+
+    /* 6. Button and Footer Color Fixes */
+    .primary-btn {
+        background-color: var(--primary-color); border-color: var(--primary-color);
+    }
+    .primary-btn:hover {
+        background-color: #005A8D;
+    }
+    .attachment-btn {
+          border: 1px solid var(--primary-color); color: var(--primary-color);
+    }
+    .attachment-btn:hover {
+          background-color: var(--primary-color); color: white;
+    }
+    .footer {
+        background-color: var(--footer-bg);
+        color: white;
+    }
+    .footer h2 {
+        color: var(--accent-color);
+        text-align: left; 
+    }
+    /* Leadership Fixes */
+    #leadership-list p {
+          background-color: #E5E7EB;
+          border-left: 3px solid var(--primary-color);
+          position: relative; /* Needed for positioning the edit button */
+    }
+    html.dark-theme #leadership-list p {
+        background-color: #333333;
+    }
+
+    /* Ensure card background and text are correct in dark mode */
+    html.dark-theme .experience-card, 
+    html.dark-theme .project-card, 
+    html.dark-theme .education-card, 
+    html.dark-theme .cert-item {
+        background-color: var(--card-bg);
+        color: var(--dark-text-color);
+    }
+
+    /* Admin Modal and other fixed styles */
+    .modal {
+        position: fixed; z-index: 200; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.7); 
+    }
+    
+    /* MODAL CONTENT STYLES */
+    .modal-content {
+        background-color: var(--card-bg);
+        margin: 5% auto; /* 5% from top and centered */
+        padding: 25px;
+        border: 1px solid #888;
+        width: 80%; /* Adjusted width */
+        max-width: 600px; /* Max width for large screens */
+        border-radius: 8px;
+        color: var(--dark-text-color);
+    }
+
+    html.dark-theme .modal-content {
+        border-color: #333;
+    }
+
+    /* Form field styling for proper look */
+    #crud-form label {
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+
+    html.dark-theme #crud-form label {
+        color: var(--dark-text-color); /* Maintain light text color on dark modal */
+    }
+
+    #crud-form input[type="text"],
+    #crud-form textarea {
+        width: 100%;
+        padding: 10px;
+        margin: 0 0 10px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        background-color: var(--background-color);
+        color: var(--dark-text-color);
+        transition: border-color 0.3s;
+    }
+
+    #crud-form input[type="text"]:focus,
+    #crud-form textarea:focus {
+        border-color: var(--primary-color);
+        outline: none;
+    }
+
+    html.dark-theme #crud-form input[type="text"],
+    html.dark-theme #crud-form textarea {
+        border-color: #555;
+        background-color: #2a2a2a;
+    }
+
+    /* Admin controls for Add New and Edit */
+    .admin-controls {
+        /* Initial state is 'none'. JS/updateAdminUI will set to 'inline-flex' on login. */
+        display: none; 
+        font-size: 0.9em; 
+        font-weight: bold; 
+        cursor: pointer; 
+        margin-left: 10px;
+        align-items: center; /* For inline-flex alignment */
+    }
+    /* MODIFIED: Styling the Add New buttons as proper buttons with explicit light mode colors */
+    .admin-controls {
+        align-items: center;
+        background-color: var(--primary-color);
+        color: var(--light-text-color); /* Text white for dark blue background in light mode */
+        padding: 4px 8px;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        transition: background-color 0.3s;
+    }
+    html.dark-theme .admin-controls {
+        background-color: var(--primary-color); /* Primary Blue in dark mode */
+        color: var(--dark-text-color); /* Light gray text */
+    }
+    .admin-controls:hover {
+        background-color: var(--accent-color);
+        color: var(--dark-text-color);
+    }
+    html.dark-theme .admin-controls:hover {
+        background-color: var(--accent-color);
+        color: var(--light-text-color);
+    }
+    .admin-controls i {
+        margin-right: 5px;
+    }
+
+    /* NEW: Styling the Edit/Delete button on cards */
+    .admin-edit-btn {
+        display: block; 
+        font-size: 0.75em; 
+        font-weight: bold; 
+        color: var(--error-color); /* Use error color for clarity */
+        cursor: pointer; 
+        margin-top: 5px;
+        padding: 3px 6px;
+        border: 1px solid var(--error-color);
+        border-radius: 4px;
+        width: fit-content;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    .admin-edit-btn:hover {
+        background-color: var(--error-color);
+        color: var(--light-text-color);
+    }
+
+
+    /* NEW: Modal Actions Container (for buttons) */
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end; /* Align buttons to the right */
+        gap: 10px;
+        margin-top: 25px;
+    }
+    
+    /* MODIFIED: Button styles (ensuring they use the general btn class) */
+    .btn {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color 0.3s, opacity 0.3s;
+    }
+
+    .secondary-btn {
+        background-color: #6c757d; /* Standard secondary color */
+        color: white;
+    }
+
+    .secondary-btn:hover {
+        background-color: #5a6268;
+    }
+
+    #delete-btn {
+        background-color: var(--error-color) !important;
+        color: white;
+    }
+    #delete-btn:hover {
+        opacity: 0.8;
+    }
+
+    /* Theme toggle button styling */
+    #theme-toggle {
+        color: var(--primary-color);
+        transition: background 0.3s, color 0.3s;
+    }
+    html.dark-theme #theme-toggle {
+        background: rgba(0,0,0,0.7);
+        color: var(--primary-color);
+    }
+    
+</style>
+<body>
+
+    <div id="admin-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Edit/Add Content</h2>
+            
+            <form id="crud-form">
+                <input type="hidden" id="crud-type">
+                <input type="hidden" id="crud-id">
+                <div id="crud-fields">
+                    <p>Select an item to edit or click 'Add New'.</p>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" id="cancel-btn" class="btn secondary-btn">Cancel</button>
+                    <button type="button" id="delete-btn" class="btn secondary-btn" style="background-color: var(--error-color);">Delete</button>
+                    <button type="submit" id="save-btn" class="btn primary-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <button id="admin-login-btn" class="btn primary-btn" style="position: fixed; top: 10px; right: 10px; z-index: 100;">Admin Login</button>
+    <button id="logout-btn" class="btn secondary-btn" style="position: fixed; top: 10px; right: 10px; z-index: 100; display: none;">Logout</button>
+    <!-- Mobile nav toggle (visible on small screens) -->
+    <button id="nav-toggle" aria-label="Open navigation" aria-expanded="false" style="position: fixed; top: 12px; left: 12px; z-index: 1200; background: rgba(0,0,0,0.6); border: 2px solid var(--primary-color); color: var(--primary-color); border-radius: 8px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Mobile navigation: overlay + left sliding panel. Links are populated dynamically by JS. -->
+    <nav id="mobile-nav" class="mobile-nav" aria-hidden="true">
+        <div class="mobile-nav-overlay" id="mobile-nav-overlay" tabindex="-1"></div>
+        <div class="mobile-nav-panel" role="dialog" aria-label="Mobile navigation panel">
+            <button id="mobile-nav-close" class="mobile-nav-close" aria-label="Close menu"><i class="fas fa-times"></i></button>
+            <div class="mobile-nav-inner">
+                <ul id="mobile-nav-list" class="mobile-nav-list" role="menu">
+                    <!-- JS will populate menu items here from page sections -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <div id="portfolio-content">
+        
+        <header id="hero-section" class="hero">
+            <div class="hero-overlay"></div>
+            <!-- Floating Shapes -->
+            <div class="floating-shape floating-shape-1"></div>
+            <div class="floating-shape floating-shape-2"></div>
+            <div class="floating-shape floating-shape-3"></div>
+            
+            <button id="theme-toggle" title="Toggle light/dark mode" style="position: fixed; top: 30px; right: 40px; z-index: 100; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; width: 44px; height: 44px; cursor: pointer; font-size: 1.5em; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); transition: all 0.3s ease; color: white;"><i id="theme-toggle-icon" class="fas fa-moon"></i></button>
+            <div class="container hero-content">
+                <img src="assets/image_2d6c24.JPG" alt="Medha Jha Professional Headshot" class="profile-pic">
+                
+                <h1 id="hero-title" class="dynamic-text">Hi, I'm <span class="highlight-name">Medha Jha</span></h1>
+                <h2 id="hero-subtitle"></h2>
+                <p class="tagline" id="hero-tagline"></p>
+
+                <div class="action-buttons">
+                    <a href="#projects" class="btn primary-btn">View My Work</a>
+                    <a href="assets/MedhaJha_Resume.pdf" class="btn secondary-btn" download>Download Resume <i class="fas fa-download"></i></a>
+                </div>
+                <div class="social-links">
+                    <a href="https://www.linkedin.com/in/medha-jha810/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/medhajha810/DSA_Project" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="mailto:medhajha810@gmail.com"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <section id="about" class="section about-section">
+                <div class="container about-grid">
+                    <div class="about-text">
+                        <h2><span class="gradient-text">About Me</span></h2>
+                        <p>Hi! I'm a 3rd-year Computer Science student at Lovely Professional University, pursuing a minor in Data Science. I'm passionate about uncovering patterns in data and building AI solutions that solve real-world problems.</p>
+                        <p>Currently serving as Chief Technical Officer at the Student Career Committee (SCC), I lead technical initiatives and mentor fellow students. As an ML Intern at SkillCraft Technology, I've developed deep learning models for gesture recognition and built full-stack applications.</p>
+                        <p>My journey is driven by curiosity, continuous learning, and a passion for transforming data into actionable insights.</p>
+                        
+                        <div class="key-achievements">
+                            <h3>Key Highlights</h3>
+                            <div class="highlight-item"><i class="fas fa-desktop"></i><p><strong>Chief Technical Officer:</strong> Leading technological innovation at Student Organization Oasis LPU.</p></div>
+                            <div class="highlight-item"><i class="fas fa-code-branch"></i><p><strong>Machine Learning Intern:</strong> Developing AI solutions at SkillCraft Technology.</p></div>
+                        </div>
+                    </div>
+                    <div class="about-image"><img src="assets/image_2d6be9.JPG" alt="Medha Jha presenting at event"></div>
+                </div>
+            </section>
+            
+            <section id="experience" class="section experience-section light-bg">
+                <div class="container">
+                    <h2><span class="gradient-text">Work Experience</span> <span class="admin-controls" id="add-experience-btn"><i class="fas fa-plus-circle"></i> Add New</span></h2>
+                    <p class="section-subtitle">Professional internships and leadership roles shaping my career journey.</p>
+                    
+                    <div class="experience-timeline" id="experience-list">
+                        <p>Loading experience data...</p>
+                    </div>
+
+                    <div class="leadership-section">
+                        <h2 style="margin-top: 40px;"><span class="gradient-text">Leadership & Volunteer Work</span> <span class="admin-controls" id="add-leadership-btn"><i class="fas fa-plus-circle"></i> Add New</span></h2>
+                        <p class="section-subtitle">Driving impact through leadership and community engagement.</p>
+                        <div class="leadership-grid" id="leadership-list">
+                            <!-- Leadership items will be loaded here from Firebase -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="achievements" class="section achievements-section">
+                <div class="container">
+                    <h2><span class="gradient-text">My Achievements</span> <span class="admin-controls" id="add-achievement-btn"><i class="fas fa-plus-circle"></i> Add New</span></h2>
+                    <p class="section-subtitle">Milestones and recognitions in my academic and professional journey</p>
+                    
+                    <div class="achievements-grid" id="achievements-list">
+                        <!-- Sample achievement that will be replaced by Firebase data -->
+                        <div class="achievement-card">
+                            <div class="achievement-header">
+                                <div class="achievement-icon">
+                                    <i class="fas fa-trophy"></i>
+                                </div>
+                                <div class="achievement-content">
+                                    <h3>Loading Achievements...</h3>
+                                    <span class="achievement-date">2024</span>
+                                </div>
+                            </div>
+                            <p>Your achievements will be loaded from Firebase shortly.</p>
+                            <div class="achievement-image">
+                                <div class="placeholder">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    <span>Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="projects" class="section projects-section">
+                <div class="container">
+                    <h2><span class="gradient-text">Featured Projects</span> <span class="admin-controls" id="add-project-btn"><i class="fas fa-plus-circle"></i> Add New</span></h2>
+                    <p class="section-subtitle">Innovative solutions leveraging AI, ML, and cutting-edge technologies.</p>
+                    <div class="projects-grid" id="projects-list">
+                        <!-- Project cards will be loaded here from Firebase -->
+                        <div class="project-card">
+                            <div class="project-image">
+                                <div class="placeholder">
+                                    <i class="fas fa-code"></i>
+                                    <span>Project Image</span>
+                                </div>
+                                <!-- Uncomment and update src when you have images -->
+                                <!-- <img src="assets/projects/project1.jpg" alt="Project Name"> -->
+                            </div>
+                            <div class="project-content">
+                                <h3>Project Title</h3>
+                                <p>Project description goes here. This is a brief overview of what the project is about.</p>
+                                <div class="project-tags">
+                                    <span>React</span>
+                                    <span>Node.js</span>
+                                    <span>MongoDB</span>
+                                </div>
+                                <div class="project-links">
+                                    <a href="#" class="btn primary-btn">View Project</a>
+                                    <a href="#" class="btn secondary-btn">View Code</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="skills-education" class="section light-bg">
+                <div class="container skills-education-grid">
+                    <div class="skills-section">
+                        <h2><span class="gradient-text">Skills & Expertise</span> <span class="admin-controls" id="add-skill-btn"><i class="fas fa-plus-circle"></i> Add New</span></h2>
+                        <p class="section-subtitle">A comprehensive toolkit for building data-driven solutions.</p>
+                        <div id="skills-list"><p>Loading skills...</p></div>
+                    </div>
+                    
+                    <div class="education-section">
+                        <h2><span class="gradient-text">Education</span> <span class="admin-controls" id="add-education-btn"><i class="fas fa-plus-circle"></i> Add New</span></h2>
+                        <div id="education-list"><p>Loading education...</p></div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="certifications" class="section certifications-section">
+                <div class="container">
+                    <h2><span class="gradient-text">Certifications</span><span class="admin-controls" id="add-cert-btn"><i class="fas fa-plus-circle"></i> Add New</span></h2>
+                    <div id="certifications-list">
+                        <p>Loading certifications...</p>
+                    </div>
+                </div>
+            </section>
+
+            
+
+        </main>
+        
+        <footer id="contact" class="footer">
+            <div class="container contact-grid">
+                   <div class="contact-info">
+                       <h2>Get In Touch</h2>
+                       <div class="info-item"><i class="fas fa-envelope"></i><p><strong>Email:</strong> <a href="mailto:medhajha810@gmail.com">medhajhaa1@gmail.com</a></p></div>
+                       <div class="info-item"><i class="fas fa-phone"></i><p><strong>Phone:</strong> <a href="tel:+918709684588">+91 8709684588</a></p></div>
+                       <div class="info-item"><i class="fas fa-map-marker-alt"></i><p><strong>Location:</strong> Jalandhar, India</p></div>
+                       <div class="info-item"><i class="fas fa-clock"></i><p><strong>Response Time:</strong> Within 24 hours</p></div>
+                       <div class="footer-social-links">
+                           <center><a href="https://www.linkedin.com/in/medha-jha810/" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                           <a href="https://github.com/medhajha810/DSA_Project" target="_blank"><i class="fab fa-github"></i></a></center>
+                       </div>
+                   </div>
+                   <div class="contact-form-container">
+                       <h3>Contact Me</h3>
+                       <form id="contact-form">
+                           <input type="email" id="contact-email" placeholder="Your Email" required>
+                           <select id="contact-purpose" required>
+                               <option value="">Select Purpose</option>
+                               <option value="Collaboration">Collaboration</option>
+                               <option value="Job Opportunity">Job Opportunity</option>
+                               <option value="Project Inquiry">Project Inquiry</option>
+                               <option value="General Inquiry">General Inquiry</option>
+                               <option value="Other">Other</option>
+                           </select>
+                           <textarea id="contact-description" placeholder="Your Message" required></textarea>
+                           <button type="submit" id="contact-submit-btn">Send Message</button>
+                       </form>
+                   </div>
+            </div>
+            <div class="copyright"><p>&copy; 2025 Medha Jha. All rights reserved.</p></div>
+        </footer>
+    </div> 
+
+
+    <script>
+        // Typing animation for hero text
+        async function typeWriter(elementId, text, speed = 50) {
+            const element = document.getElementById(elementId);
+            if (!element) return;
+            
+            element.textContent = '';
+            let i = 0;
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            
+            return new Promise(resolve => {
+                type();
+                setTimeout(resolve, text.length * speed + 100);
+            });
+        }
+
+        // Create floating elements for background
+        function createFloatingElements() {
+            const colors = ['rgba(0, 168, 232, 0.1)', 'rgba(0, 119, 182, 0.1)', 'rgba(0, 86, 143, 0.1)'];
+            const container = document.querySelector('.hero');
+            
+            for (let i = 0; i < 5; i++) {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                
+                // Random properties
+                const size = Math.random() * 100 + 50; // 50-150px
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const duration = Math.random() * 10 + 10; // 10-20s
+                const delay = Math.random() * 5;
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                element.style.cssText = `
+                    width: ${size}px;
+                    height: ${size}px;
+                    background: ${color};
+                    position: absolute;
+                    top: ${posY}%;
+                    left: ${posX}%;
+                    border-radius: ${Math.random() > 0.5 ? '50%' : '10px'};
+                    animation: float ${duration}s ease-in-out ${delay}s infinite;
+                    z-index: 1;
+                    pointer-events: none;
+                `;
+                
+                container.appendChild(element);
+            }
+        }
+
+        // Initialize animations when the page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Type "Hi, I'm Medha Jha"
+            await typeWriter('hero-title', "Hi, I'm Medha Jha");
+            await new Promise(resolve => setTimeout(resolve, 300));
+            await typeWriter('hero-subtitle', 'Data Science Engineer');
+            await new Promise(resolve => setTimeout(resolve, 200));
+            await typeWriter('hero-tagline', 'Transforming data into meaningful insights and solutions');
+            
+            // Add floating elements
+            createFloatingElements();
+            
+            // Add scroll reveal animation
+            const revealElements = document.querySelectorAll('.reveal-on-scroll');
+            const revealOnScroll = () => {
+                revealElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const elementVisible = 150;
+                    
+                    if (elementTop < window.innerHeight - elementVisible) {
+                        element.classList.add('visible');
+                    }
+                });
+            };
+            
+            window.addEventListener('scroll', revealOnScroll);
+            revealOnScroll(); // Check on initial load
+        });
+
+        // ⚠️ 1. YOUR FIREBASE CONFIG
+        const firebaseConfig = {
+            apiKey: "AIzaSyAHMHCDGsGX1lQF7GEwm4mK4auKXh97PzY",
+            authDomain: "medhajhaportfolio.firebaseapp.com",
+            projectId: "medhajhaportfolio",
+            storageBucket: "medhajhaportfolio.firebasestorage.app",
+            messagingSenderId: "12968360571",
+            appId: "1:12968360571:web:4b6738e6161168858d80de"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const functions = firebase.functions();
+        const ADMIN_EMAIL = 'medhajha810@gmail.com'; 
+        
+        // ⚠️ CRITICAL: REPLACE WITH YOUR ACTUAL ADMIN UID
+        const ADMIN_UID = 'FOLjSSQVNiWed38KOGsvBIjIX9l1'; 
+
+        let isAdmin = false;
+
+        // --- DOM ELEMENTS AND MODAL SETUP ---
+        const modal = document.getElementById('admin-modal');
+        const closeButton = document.querySelector('.close-button');
+        const crudForm = document.getElementById('crud-form');
+        const crudFields = document.getElementById('crud-fields');
+        const deleteBtn = document.getElementById('delete-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+
+
+        // Modal event listeners
+        if (closeButton) closeButton.onclick = () => { modal.style.display = 'none'; };
+        if (cancelBtn) cancelBtn.onclick = () => { modal.style.display = 'none'; };
+        window.onclick = (event) => { if (event.target == modal) { modal.style.display = 'none'; } };
+
+
+        // Show/hide admin controls based on admin login
+        function updateAdminUI() {
+            if (isAdmin) {
+                // Show all admin controls (Add New buttons use .admin-controls class)
+                document.querySelectorAll('.admin-controls').forEach(el => el.style.display = 'inline-flex'); 
+                document.getElementById('admin-login-btn').style.display = 'none';
+                document.getElementById('logout-btn').style.display = 'inline-block';
+            } else {
+                // Hide all admin controls (Add New buttons use .admin-controls class)
+                document.querySelectorAll('.admin-controls').forEach(el => el.style.display = 'none');
+                document.getElementById('admin-login-btn').style.display = 'inline-block';
+                document.getElementById('logout-btn').style.display = 'none';
+            }
+        }
+
+        // --- GENERIC DATA FETCHING & RENDERING ---
+
+        async function loadData(collection, containerId, renderItem, isAdmin) {
+            const container = document.getElementById(containerId);
+            if (!container) return; 
+
+            container.innerHTML = `<p>Loading ${collection} data...</p>`; 
+
+            try {
+                // Fetch data using the exact collection name
+                const snapshot = await db.collection(collection).orderBy('order', 'asc').get();
+                container.innerHTML = ''; 
+
+                if (snapshot.empty) {
+                    container.innerHTML = `<p>No ${collection} data available.</p>`;
+                    return;
+                }
+
+                const collectionIsGrid = (collection === 'Certifications' || collection === 'skills');
+                
+                const dataContainer = document.createElement('div');
+                if (collection === 'leadership') {
+                    dataContainer.className = 'leadership-list';
+                } else if (collectionIsGrid) {
+                   dataContainer.className = (collection === 'Certifications') ? 'certifications-grid' : 'skills-grid-container'; 
+                } else {
+                   dataContainer.className = (collection === 'experience') ? 'experience-timeline' : 'projects-grid';
+                }
+
+                snapshot.docs.forEach(doc => {
+                    const data = doc.data();
+                    const docId = doc.id;
+                    
+                    const itemHtml = renderItem(data, docId, isAdmin);
+                    
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = itemHtml;
+                    
+                    const itemElement = tempDiv.firstElementChild; 
+
+                    // Admin Edit/Delete button logic: only run if isAdmin is true
+                    if (isAdmin) {
+                        const parentForAdmin = itemElement.querySelector('.card-attachments') || itemElement.querySelector('.project-links') || itemElement.querySelector('.education-card') || itemElement.querySelector('.skills-category');
+                        
+                        if (parentForAdmin) {
+                            const editBtn = document.createElement('span');
+                            editBtn.className = 'admin-edit-btn';
+                            editBtn.textContent = 'Edit/Delete';
+                            const singularType = collection === 'Certifications' ? 'certification' : collection.replace(/s$/, ''); 
+                            editBtn.onclick = () => openEditModal(singularType, docId);
+                            parentForAdmin.appendChild(editBtn);
+                        } else if (collection === 'leadership') {
+                               const editBtn = document.createElement('span');
+                               editBtn.className = 'admin-edit-btn';
+                               editBtn.textContent = 'Edit/Delete';
+                               editBtn.style.cssText = 'position: absolute; right: 10px; top: 5px; font-size: 0.7em;';
+                               editBtn.onclick = () => openEditModal('leadership', docId);
+                               itemElement.appendChild(editBtn);
+                        }
+                    } // end if (isAdmin)
+
+                    dataContainer.appendChild(itemElement);
+                });
+                
+                container.appendChild(dataContainer); 
+
+            } catch (error) {
+                console.error(`Error loading ${collection}:`, error);
+                container.innerHTML = `<p style="color:var(--error-color);">Error loading data. Check console and Firestore Rules. (Collection: ${collection})</p>`;
+            }
+        }
+
+        // --- RENDERING FUNCTIONS ---
+
+        function renderAchievement(data, docId, isAdmin) {
+            // Process image URL - handle both direct URLs and relative paths
+            let imageUrl = data.imageUrl || '';
+            
+            // If it's a relative path, assume it's in the assets folder
+            if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/') && !imageUrl.startsWith('data:')) {
+                imageUrl = `assets/achievements/${imageUrl}`;
+            }
+            
+            // Create image content with error handling
+            const imageContent = imageUrl ? 
+                `<img src="${imageUrl}" 
+                     alt="${data.title || 'Achievement'}" 
+                     onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='<div class=\'placeholder\'><i class=\'fas fa-trophy\'></i><span>${data.title || 'Achievement'}</span></div>';">` : 
+                `<div class="placeholder">
+                    <i class="fas fa-trophy"></i>
+                    <span>${data.title || 'Achievement'}</span>
+                </div>`;
+            
+            // Generate certificate button if certificate URL exists and it's not the Wisdom War Technical Quiz
+            const showCertificateButton = data.certificate && data.title !== 'Ranked 1st in Wisdom War Technical Quiz';
+            const certificateButton = showCertificateButton ? `
+                <div class="achievement-buttons">
+                    <a href="${data.certificate}" target="_blank" rel="noopener noreferrer" class="achievement-certificate-btn">
+                        <i class="fas fa-certificate"></i>Certificate
+                    </a>
+                </div>
+            ` : '';
+                
+            return `
+                <div class="achievement-card" id="achievement-${docId}">
+                    <div class="achievement-header">
+                        <div class="achievement-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="achievement-content">
+                            <h3>${data.title || 'Achievement Title'}</h3>
+                            ${data.date ? `<span class="achievement-date">${data.date}</span>` : ''}
+                        </div>
+                    </div>
+                    ${data.description ? `<p>${data.description}</p>` : ''}
+                    <div class="achievement-image">
+                        ${imageContent}
+                    </div>
+                    ${certificateButton}
+                    ${isAdmin ? `
+                        <div class="admin-controls">
+                            <button onclick="event.stopPropagation(); openEditModal('achievement', '${docId}')" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="event.stopPropagation(); deleteItem('achievements', '${docId}')" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    ` : ''}
+                </div>`;
+        }
+
+        function renderExperience(data, docId, isAdmin) {
+            return `
+                <div class="experience-card">
+                    <div class="card-header">
+                        <h3>${data.role}</h3>
+                        <p>${data.company} | ${data.duration}</p>
+                    </div>
+                    <ul class="card-details">
+                        ${Array.isArray(data.details) ? data.details.map(detail => `<li>${detail}</li>`).join('') : (data.details ? `<li>${data.details}</li>` : '')}
+                    </ul>
+                    <div class="card-attachments">
+                        ${data.certificateLink ? `<a href="${data.certificateLink}" target="_blank" class="attachment-btn"><i class="fas fa-award"></i> Certificate</a>` : ''}
+                        ${data.lorLink && data.lorLink !== 'null' ? `<a href="${data.lorLink}" target="_blank" class="attachment-btn"><i class="fas fa-file-alt"></i> LOR</a>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderProject(data, docId, isAdmin) {
+            // Process image URL - handle both direct URLs and relative paths
+            let imageUrl = data.imageUrl || '';
+            
+            // If it's a relative path, assume it's in the projects folder
+            if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/') && !imageUrl.startsWith('data:')) {
+                imageUrl = `assets/projects/${imageUrl}`;
+            }
+            
+            return `
+                <div class="project-card" id="project-${docId}">
+                    <div class="project-image-container">
+                        ${imageUrl ? 
+                            `<img src="${imageUrl}" 
+                                 alt="${data.title || 'Project Screenshot'}" 
+                                 class="project-image"
+                                 onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='<div class=\'placeholder\'><i class=\'fas fa-code\'></i><span>${data.title || 'Project Image'}</span></div>';"
+                            >` : 
+                            `<div class="placeholder">
+                                <i class="fas fa-code"></i>
+                                <span>${data.title || 'Project Image'}</span>
+                            </div>`
+                        }
+                    </div>
+                    <div class="project-content">
+                        <h3>${data.title || 'Project Title'}</h3>
+                        <p class="project-date">${data.date || ''}</p>
+                        <div class="project-tags">
+                            ${Array.isArray(data.tech) ? data.tech.map(tag => `<span>${tag}</span>`).join('') : (data.tech ? `<span>${data.tech}</span>` : '')}
+                        </div>
+                        <p class="project-description">${data.description || ''}</p>
+                        ${data.features && data.features.length > 0 ? `
+                            <div class="project-features">
+                                <h4>Key Features:</h4>
+                                <ul>
+                                    ${Array.isArray(data.features) ? data.features.map(feature => `<li>${feature}</li>`).join('') : `<li>${data.features}</li>`}
+                                </ul>
+                            </div>
+                        ` : ''}
+                        <div class="project-links">
+                            ${data.demoLink && data.demoLink !== 'null' && !['TruthLens – Accessible AI-Powered News Analysis', 'Exploratory Data Analysis of District-Level PGI 2021-22', 'MSME Insights Dashboard using UAM Dataset', 'Hand Gesture Recognition System', 'Veritas Vox – Podcast Misinformation Detection'].includes(data.title) ? 
+                                `<a href="${data.demoLink}" target="_blank" class="btn primary-btn">
+                                    <i class="fas fa-external-link-alt"></i> Live Demo
+                                </a>` : ''}
+                            ${data.codeLink ? 
+                                `<a href="${data.codeLink}" target="_blank" class="btn secondary-btn">
+                                    <i class="fab fa-github"></i> View Code
+                                </a>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function renderEducation(data, docId, isAdmin) {
+            return `
+                <div class="education-card">
+                    <h3>${data.degree}</h3>
+                    <p class="institution">${data.institution} ${data.major ? `, ${data.major}` : ''}</p>
+                    <p><strong>${data.duration}</strong></p>
+                    <p>GPA: ${data.gpa}</p>
+                    <p class="coursework-list"><strong>Relevant Coursework:</strong> ${Array.isArray(data.coursework) ? data.coursework.join(', ') : (data.coursework || '')}</p>
+                    <div class="card-attachments"></div>
+                </div>
+            `;
+        }
+
+        function renderSkill(data, docId, isAdmin) {
+            return `
+                <div class="skills-category">
+                    <h3>${data.category}</h3>
+                    <div class="skill-tags">
+                        ${Array.isArray(data.items) ? data.items.map(item => `<span>${item}</span>`).join('') : (data.items ? `<span>${data.items}</span>` : '')}
+                    </div>
+                    <div class="card-attachments"></div>
+                </div>
+            `;
+        }
+        
+        function renderCertification(data, docId, isAdmin) {
+             return `
+                <div class="cert-item">
+                    <p class="cert-title">${data.title}</p>
+                    <p class="cert-issuer">${data.issuer} | ${data.date}</p>
+                    <div class="card-attachments">
+                        <a href="${data.link}" target="_blank" class="attachment-btn view-cert"><i class="fas fa-eye"></i> View</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderLeadership(data, docId, isAdmin) {
+            // Process image URL - handle both direct URLs and relative paths
+            let imageUrl = data.imageUrl || '';
+            
+            // If it's a relative path, assume it's in the assets folder
+            if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/') && !imageUrl.startsWith('data:')) {
+                imageUrl = `assets/leadership/${imageUrl}`;
+            }
+            
+            // Generate certificate button if certificate URL exists
+            const certificateButton = data.certificateUrl ? `
+                <div class="certificate-link">
+                    <a href="${data.certificateUrl}" target="_blank" rel="noopener noreferrer">
+                        <i class="fas fa-certificate"></i> View Certificate
+                    </a>
+                </div>
+            ` : '';
+
+            // Generate image section
+            const imageSection = imageUrl ? `
+                <div class="leadership-image-container">
+                    <div class="leadership-image">
+                        <img src="${imageUrl}" 
+                             alt="${data.organization || 'Organization'}" 
+                             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'image-placeholder\'><i class=\'fas fa-building\'></i><span>${data.organization || 'Organization'}</span></div>';"
+                        >
+                    </div>
+                    ${certificateButton}
+                </div>
+            ` : `
+                <div class="leadership-image-container">
+                    <div class="image-placeholder">
+                        <i class="fas fa-users"></i>
+                        <span>${data.organization || 'Organization'}</span>
+                    </div>
+                    ${certificateButton}
+                </div>
+            `;
+
+            // Generate admin controls
+            const adminControls = isAdmin ? `
+                <div class="admin-controls">
+                    <button onclick="event.stopPropagation(); openEditModal('leadership', '${docId}')" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button onclick="event.stopPropagation(); deleteItem('leadership', '${docId}')" title="Delete">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            ` : '';
+            
+            return `
+                <div class="leadership-card" id="leadership-${docId}">
+                    ${adminControls}
+                    <div class="leadership-content">
+                        <div class="leadership-text">
+                            <h3>${data.title || 'Leadership Role'}</h3>
+                            <p class="organization">
+                                <i class="fas fa-building"></i>
+                                ${data.organization || 'Organization'}
+                            </p>
+                            <p class="duration">
+                                <i class="far fa-calendar-alt"></i>
+                                ${data.duration || 'Duration not specified'}
+                            </p>
+                            ${data.description ? `
+                                <div class="leadership-description">
+                                    ${data.description}
+                                </div>
+                            ` : ''}
+                        </div>
+                        ${imageSection}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Functions to call the generic loader
+        const loadExperiences = (isAdmin) => loadData('experience', 'experience-list', renderExperience, isAdmin); 
+        const loadProjects = (isAdmin) => loadData('projects', 'projects-list', renderProject, isAdmin);
+        const loadEducation = (isAdmin) => loadData('education', 'education-list', renderEducation, isAdmin);
+        const loadSkills = (isAdmin) => loadData('skills', 'skills-list', renderSkill, isAdmin);
+        const loadCertifications = (isAdmin) => loadData('Certifications', 'certifications-list', renderCertification, isAdmin); 
+        const loadLeadership = (isAdmin) => loadData('leadership', 'leadership-list', renderLeadership, isAdmin);
+        const loadAchievements = (isAdmin) => {
+            console.log('Loading achievements...');
+            return loadData('achievements', 'achievements-list', (data, docId, isAdmin) => {
+                console.log('Rendering achievement:', { id: docId, data: data, hasCertificateUrl: !!data.certificateUrl });
+                return renderAchievement(data, docId, isAdmin);
+            }, isAdmin);
+        };
+
+
+        // --- APPLICATION STARTUP LOGIC ---
+
+        // 1. Load the data immediately on page load for all users (view-only mode)
+        loadExperiences(false);
+        loadProjects(false);
+        loadEducation(false);
+        loadSkills(false);
+        loadCertifications(false); 
+        loadLeadership(false);
+        loadAchievements(false);
+        updateAdminUI(); // Initial check to hide controls before auth state resolves
+
+        // 2. Check login status and update Admin UI
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                let currentIsAdmin = false;
+                if (user.uid === ADMIN_UID) {
+                    currentIsAdmin = true;
+                } else {
+                    alert('You are not authorized as admin. Logging out.');
+                    auth.signOut();
+                    return; 
+                }
+                isAdmin = currentIsAdmin;
+                updateAdminUI();
+
+                // Reload data with admin access to show edit buttons
+                loadExperiences(true);
+                loadProjects(true);
+                loadEducation(true);
+                loadSkills(true);
+                loadCertifications(true);
+                loadLeadership(true);
+                loadAchievements(true); 
+                
+            } else {
+                isAdmin = false;
+                updateAdminUI();
+            }
+        });
+
+        // --- LOGIN/LOGOUT & CRUD LISTENERS ---
+        
+        document.getElementById('admin-login-btn').addEventListener('click', () => {
+             const provider = new firebase.auth.GoogleAuthProvider();
+             auth.signInWithPopup(provider).catch(error => {
+                 alert('Admin Login Failed: ' + error.message);
+             });
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            auth.signOut();
+        });
+        
+        // Attach event listeners to the "Add New" buttons (CRUD initiation)
+        document.getElementById('add-experience-btn').onclick = () => openEditModal('experience');
+        document.getElementById('add-project-btn').onclick = () => openEditModal('project');
+        document.getElementById('add-skill-btn').onclick = () => openEditModal('skill');
+        document.getElementById('add-education-btn').onclick = () => openEditModal('education');
+        document.getElementById('add-cert-btn').onclick = () => openEditModal('certification');
+        document.getElementById('add-leadership-btn').onclick = () => openEditModal('leadership');
+        document.getElementById('add-achievement-btn').onclick = () => openEditModal('achievement'); 
+
+        // --- CRUD HELPER FUNCTIONS ---
+        
+        function getCollectionName(type) {
+            if (type === 'achievement') return 'achievements';
+            if (type === 'certification') return 'Certifications'; 
+            if (type === 'experience') return 'experience'; 
+            if (type === 'leadership') return 'leadership';
+             return type + 's'; 
+        }
+
+        // MODIFIED: Added placeholder to the text input fields
+        function generateFormFields(data, type) {
+            let html = '';
+            const fieldMap = {
+                experience: [
+                    { key: 'company', placeholder: 'e.g., Lovely Professional University' },
+                    { key: 'role', placeholder: 'e.g., Chief Technical Officer' },
+                    { key: 'duration', placeholder: 'e.g., Dec 2024 - Present' },
+                    { key: 'order', placeholder: 'e.g., 1 (for first item)' },
+                    { key: 'certificateLink', placeholder: 'Certificate URL (optional)' },
+                    { key: 'lorLink', placeholder: 'LOR URL (optional, use null if not available)' }
+                ],
+                project: [
+                    { key: 'title', placeholder: 'e.g., Gastrointestinal Cancer Detection' },
+                    { key: 'date', placeholder: 'e.g., March 2025' },
+                    { key: 'description', placeholder: 'A brief overview of the project' },
+                    { key: 'order', placeholder: 'e.g., 1 (for first item)' },
+                    { key: 'codeLink', placeholder: 'GitHub/Code URL' },
+                    { key: 'demoLink', placeholder: 'Live Demo URL (use null if not available)' }
+                ],
+                education: [
+                    { key: 'institution', placeholder: 'e.g., Lovely Professional University' },
+                    { key: 'degree', placeholder: 'e.g., B.Tech' },
+                    { key: 'major', placeholder: 'e.g., Computer Science Engineering' },
+                    { key: 'minor', placeholder: 'e.g., Data Science' },
+                    { key: 'duration', placeholder: 'e.g., 2022 - 2026' },
+                    { key: 'gpa', placeholder: 'e.g., 8.9' },
+                    { key: 'order', placeholder: 'e.g., 1 (for first item)' }
+                ],
+                skill: [
+                    { key: 'category', placeholder: 'e.g., Languages or Databases' },
+                    { key: 'order', placeholder: 'e.g., 1 (for first item)' }
+                ],
+                certification: [
+                    { key: 'title', placeholder: 'e.g., AWS Certified Cloud Practitioner' },
+                    { key: 'issuer', placeholder: 'e.g., Amazon Web Services (AWS)' },
+                    { key: 'date', placeholder: 'e.g., July 2024' },
+                    { key: 'link', placeholder: 'Verification Link URL' },
+                    { key: 'order', placeholder: 'e.g., 1 (for first item)' }
+                ],
+                leadership: [
+                    { key: 'title', placeholder: 'e.g., Chief Technical Officer' },
+                    { key: 'organization', placeholder: 'e.g., Student Organization Oasis LPU' },
+                    { key: 'duration', placeholder: 'e.g., March 2024 - Present' },
+                    { key: 'order', placeholder: 'e.g., 1 (for first item)' }
+                ],
+                achievement: [
+                    { key: 'title', placeholder: 'e.g., Winner of Hackathon' },
+                    { key: 'description', placeholder: 'A brief description of the achievement' },
+                    { key: 'date', placeholder: 'e.g., March 2025' },
+                    { key: 'icon', placeholder: 'e.g., fas fa-trophy' },
+                    { key: 'imageUrl', placeholder: 'URL to achievement image (optional)' },
+                    { key: 'order', placeholder: 'e.g., 1 (for first item)' }
+                ]
+            };
+            
+            fieldMap[type].forEach(field => {
+                const key = field.key;
+                const placeholder = field.placeholder;
+                const value = data[key] || '';
+                const displayKey = key.charAt(0).toUpperCase() + key.slice(1).replace(/Link|gpa|lor/g, match => match.toUpperCase());
+
+                if (key === 'description' || key.toLowerCase().includes('link')) {
+                    html += `<label for="${key}">${displayKey}</label><textarea id="${key}" name="${key}" rows="2" placeholder="${placeholder}">${value}</textarea>`;
+                } else {
+                    html += `<label for="${key}">${displayKey}</label><input type="text" id="${key}" name="${key}" value="${value}" placeholder="${placeholder}">`;
+                }
+            });
+
+            const arrayKey = 
+                type === 'experience' ? 'details' : 
+                type === 'project' ? 'features' : 
+                type === 'education' ? 'coursework' : 
+                type === 'skill' ? 'items' : null; 
+            
+            if (arrayKey) {
+                const arrayValue = data[arrayKey] ? data[arrayKey].join('\n') : '';
+                const arrayLabel = arrayKey.charAt(0).toUpperCase() + arrayKey.slice(1);
+                html += `<label for="${arrayKey}">${arrayLabel} (One item per line)</label><textarea id="${arrayKey}" name="${arrayKey}" rows="5" placeholder="Item 1\nItem 2\nItem 3...">${arrayValue}</textarea>`;
+            }
+            
+            return html;
+        }
+
+        async function openEditModal(type, id = null) {
+            if (!isAdmin) {
+                alert("You must be logged in as an administrator to add or edit content.");
+                return;
+            }
+            
+            crudFields.innerHTML = ''; 
+            crudForm.reset();
+            document.getElementById('crud-type').value = type;
+            document.getElementById('crud-id').value = id || '';
+            deleteBtn.style.display = id ? 'inline-block' : 'none';
+            // Update modal title based on action
+            document.querySelector('#admin-modal h2').textContent = id ? `Edit ${type.charAt(0).toUpperCase() + type.slice(1)}` : `Add New ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+
+            const collectionName = getCollectionName(type);
+
+            let data = {};
+            if (id) {
+                const doc = await db.collection(collectionName).doc(id).get();
+                if (doc.exists) {
+                    data = doc.data();
+                }
+            } else {
+                data.order = await db.collection(collectionName).get().then(snap => snap.size + 1);
+            }
+            
+            crudFields.innerHTML = generateFormFields(data, type);
+            modal.style.display = 'block';
+        }
+
+        crudForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!isAdmin) {
+                alert("You must be logged in as an administrator to save changes.");
+                return;
+            }
+
+            const type = document.getElementById('crud-type').value;
+            const id = document.getElementById('crud-id').value;
+            const collectionName = getCollectionName(type);
+
+            const formData = new FormData(crudForm);
+            const data = Object.fromEntries(formData.entries());
+
+            const arrayKey = 
+                type === 'experience' ? 'details' : 
+                type === 'project' ? 'features' : 
+                type === 'education' ? 'coursework' : 
+                type === 'skill' ? 'items' : null; 
+            
+            if (arrayKey && data[arrayKey]) {
+                data[arrayKey] = data[arrayKey].split('\n').map(item => item.trim()).filter(item => item.length > 0);
+            }
+            
+            data.order = parseInt(data.order) || 99;
+
+            try {
+                if (id) {
+                    await db.collection(collectionName).doc(id).update(data);
+                } else {
+                    await db.collection(collectionName).add(data);
+                }
+                
+                modal.style.display = 'none';
+                
+                if (type === 'experience') loadExperiences(true);
+                else if (type === 'project') loadProjects(true);
+                else if (type === 'education') loadEducation(true);
+                else if (type === 'skill') loadSkills(true);
+                else if (type === 'certification') loadCertifications(true);
+                else if (type === 'leadership') loadLeadership(true);
+
+                alert(`${type} saved successfully!`);
+
+            } catch (error) {
+                console.error("Save failed:", error);
+                alert(`Failed to save ${type}: ${error.message}`);
+            }
+        });
+
+        deleteBtn.addEventListener('click', async () => {
+            if (!isAdmin) {
+                alert("You must be logged in as an administrator to delete content.");
+                return;
+            }
+
+            if (!confirm("Are you sure you want to delete this item? This action cannot be undone.")) return;
+            
+            const type = document.getElementById('crud-type').value;
+            const id = document.getElementById('crud-id').value;
+            const collectionName = getCollectionName(type);
+            
+            try {
+                await db.collection(collectionName).doc(id).delete();
+                
+                modal.style.display = 'none';
+                
+                if (type === 'experience') loadExperiences(true);
+                else if (type === 'project') loadProjects(true);
+                else if (type === 'education') loadEducation(true);
+                else if (type === 'skill') loadSkills(true);
+                else if (type === 'certification') loadCertifications(true);
+                else if (type === 'leadership') loadLeadership(true);
+                
+                alert(`${type} deleted successfully!`);
+
+            } catch (error) {
+                console.error("Delete failed:", error);
+                alert(`Failed to delete ${type}: ${error.message}`);
+            }
+        });
+    // THEME TOGGLE LOGIC
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeToggleIcon = document.getElementById('theme-toggle-icon');
+    function setTheme(theme) {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark-theme');
+            themeToggleIcon.classList.remove('fa-moon');
+            themeToggleIcon.classList.add('fa-sun');
+        } else {
+            document.documentElement.classList.remove('dark-theme');
+            themeToggleIcon.classList.remove('fa-sun');
+            themeToggleIcon.classList.add('fa-moon');
+        }
+        localStorage.setItem('theme', theme);
+    }
+    themeToggleBtn.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.contains('dark-theme');
+        setTheme(isDark ? 'light' : 'dark');
+    });
+    // On load, set theme from localStorage
+    (function() {
+        const saved = localStorage.getItem('theme');
+        if (saved === 'dark') setTheme('dark');
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) setTheme('dark');
+    })();
+
+    // MOBILE NAV: slide-from-left panel, links are generated from page sections
+    const navToggle = document.getElementById('nav-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+    const mobileNavOverlay = document.getElementById('mobile-nav-overlay');
+    const mobileNavClose = document.getElementById('mobile-nav-close');
+    const mobileNavList = document.getElementById('mobile-nav-list');
+
+    function openMobileNav() {
+        mobileNav.classList.add('open');
+        mobileNav.setAttribute('aria-hidden', 'false');
+        navToggle.setAttribute('aria-expanded', 'true');
+        // move focus to the close button for accessibility
+        if (mobileNavClose) mobileNavClose.focus();
+    }
+    function closeMobileNav() {
+        mobileNav.classList.remove('open');
+        mobileNav.setAttribute('aria-hidden', 'true');
+        navToggle.setAttribute('aria-expanded', 'false');
+        navToggle.focus();
+    }
+
+    navToggle.addEventListener('click', () => {
+        const isOpen = mobileNav.classList.contains('open');
+        if (isOpen) closeMobileNav(); else openMobileNav();
+    });
+
+    // Build the mobile nav list dynamically from page sections (header, sections, footer)
+    function buildMobileNav() {
+        if (!mobileNavList) return;
+        const nodes = Array.from(document.querySelectorAll('header[id], section[id], footer[id]'));
+        mobileNavList.innerHTML = '';
+
+        nodes.forEach(node => {
+            const id = node.id;
+            let label = '';
+            if (id === 'hero-section') label = 'Home';
+            else {
+                const heading = node.querySelector('h2, h1, h3');
+                if (heading) {
+                    // Clone and remove any admin controls inside the heading so 'Add New' text is not included
+                    const copy = heading.cloneNode(true);
+                    copy.querySelectorAll('.admin-controls').forEach(el => el.remove());
+                    const txt = copy.textContent ? copy.textContent.trim() : '';
+                    if (txt) label = txt;
+                    else label = id.replace(/-|_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                } else {
+                    label = id.replace(/-|_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                }
+            }
+
+            const li = document.createElement('li');
+            li.setAttribute('role', 'none');
+            const a = document.createElement('a');
+            a.setAttribute('href', `#${id}`);
+            a.setAttribute('role', 'menuitem');
+            a.textContent = label;
+            a.addEventListener('click', () => setTimeout(closeMobileNav, 50));
+            li.appendChild(a);
+            mobileNavList.appendChild(li);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', buildMobileNav);
+
+    if (mobileNavOverlay) mobileNavOverlay.addEventListener('click', closeMobileNav);
+    if (mobileNavClose) mobileNavClose.addEventListener('click', closeMobileNav);
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMobileNav(); });
+
+    // Contact Form Handling using Formspree
+    const contactForm = document.getElementById('contact-form');
+    const fullContactForm = document.getElementById('contact-form-full');
+    const contactSubmitBtn = document.getElementById('contact-submit-btn');
+    const fullContactSubmitBtn = document.getElementById('full-contact-submit-btn');
+
+    // Function to handle form submission using Formspree
+    async function handleContactSubmit(form, submitBtn) {
+        const email = form.querySelector('input[type="email"]').value;
+        const purpose = form.querySelector('select').value;
+        const description = form.querySelector('textarea').value;
+
+        // Basic validation
+        if (!email || !purpose || !description) {
+            alert('Please fill in all fields.');
+            return;
+        }
+
+        // Disable button and show loading
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+
+        try {
+            // Replace YOUR_FORMSPREE_ENDPOINT_HERE with your actual Formspree endpoint
+            // Example: https://formspree.io/f/xqzkvqgd
+            const response = await fetch('https://formspree.io/f/xblpewjw', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email,
+                    purpose,
+                    description,
+                    _subject: `Portfolio Contact: ${purpose}`,
+                    _template: 'table'
+                })
+            });
+
+            if (response.ok) {
+                alert('Message sent successfully! I\'ll get back to you soon.');
+                form.reset();
+            } else {
+                throw new Error('Form submission failed');
+            }
+        } catch (error) {
+            console.error('Error sending message:', error);
+            alert('Failed to send message. Please try again or contact me directly at medhajha810@gmail.com');
+        } finally {
+            // Re-enable button
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Send Message';
+        }
+    }
+
+    // Event listeners for both forms
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            handleContactSubmit(contactForm, contactSubmitBtn);
+        });
+    }
+
+    if (fullContactForm) {
+        fullContactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            handleContactSubmit(fullContactForm, fullContactSubmitBtn);
+        });
+    }
+    </script>
+</body>
+</html>

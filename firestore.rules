@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow anyone to read data from all collections
+    match /{document=**} {
+      allow read: if true;
+      // Only allow writes/updates/deletes if the user is the admin (UID check)
+      allow write: if request.auth.uid == "FOLjSSQVNiWed38KOGsvBIjIX9l1"; 
+    }
+  }
+}
