@@ -1095,7 +1095,13 @@
                     </div>
 
                     <div class="leadership-section">
-                        <h2 style="margin-top: 40px;"><span class="gradient-text">Leadership & Volunteer Work</span> <span class="admin-controls" id="add-leadership-btn"><i class="fas fa-plus-circle"></i> Add New</span></h2>
+                        <h2 style="margin-top: 40px;">
+                            <span class="gradient-text">Leadership & Volunteer Work</span>
+                            <button class="slideshow-arrow-btn" onclick="openLeadershipSlideshow()" title="View All Leadership">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                            <span class="admin-controls" id="add-leadership-btn"><i class="fas fa-plus-circle"></i> Add New</span>
+                        </h2>
                         <p class="section-subtitle">Driving impact through leadership and community engagement.</p>
                         <div class="leadership-grid" id="leadership-list">
                             <!-- Leadership items will be loaded here from Firebase -->
@@ -1106,7 +1112,13 @@
 
             <section id="achievements" class="section achievements-section">
                 <div class="container">
-                    <h2><span class="gradient-text">My Achievements</span> <span class="admin-controls" id="add-achievement-btn"><i class="fas fa-plus-circle"></i> Add New</span></h2>
+                    <h2>
+                        <span class="gradient-text">My Achievements</span>
+                        <button class="slideshow-arrow-btn" onclick="openAchievementSlideshow()" title="View All Achievements">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <span class="admin-controls" id="add-achievement-btn"><i class="fas fa-plus-circle"></i> Add New</span>
+                    </h2>
                     <p class="section-subtitle">Milestones and recognitions in my academic and professional journey</p>
                     
                     <div class="achievements-grid" id="achievements-list">
@@ -1135,7 +1147,13 @@
 
             <section id="projects" class="section projects-section">
                 <div class="container">
-                    <h2><span class="gradient-text">Featured Projects</span> <span class="admin-controls" id="add-project-btn"><i class="fas fa-plus-circle"></i> Add New</span></h2>
+                    <h2>
+                        <span class="gradient-text">Featured Projects</span>
+                        <button class="slideshow-arrow-btn" onclick="openProjectSlideshow()" title="View All Projects">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <span class="admin-controls" id="add-project-btn"><i class="fas fa-plus-circle"></i> Add New</span>
+                    </h2>
                     <p class="section-subtitle">Innovative solutions leveraging AI, ML, and cutting-edge technologies.</p>
                     <div class="projects-grid" id="projects-list">
                         <!-- Project cards will be loaded here from Firebase -->
@@ -1183,7 +1201,13 @@
             
             <section id="certifications" class="section certifications-section">
                 <div class="container">
-                    <h2><span class="gradient-text">Certifications</span><span class="admin-controls" id="add-cert-btn"><i class="fas fa-plus-circle"></i> Add New</span></h2>
+                    <h2>
+                        <span class="gradient-text">Certifications</span>
+                        <button class="slideshow-arrow-btn" onclick="openCertificationScroll()" title="View All Certifications">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        <span class="admin-controls" id="add-cert-btn"><i class="fas fa-plus-circle"></i> Add New</span>
+                    </h2>
                     <div id="certifications-list">
                         <p>Loading certifications...</p>
                     </div>
@@ -1236,6 +1260,108 @@
             </div>
             <div class="copyright"><p>&copy; 2025 Medha Jha. All rights reserved.</p></div>
         </footer>
+
+        <!-- Project Slideshow Modal -->
+        <div id="projectSlideshowModal" class="slideshow-modal">
+            <div class="slideshow-container">
+                <button class="slideshow-close" onclick="closeProjectSlideshow()">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <div class="slideshow-content">
+                    <button class="slideshow-nav prev" onclick="changeSlide(-1)">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    
+                    <div class="slideshow-slides" id="slideshowSlides">
+                        <!-- Slides will be dynamically loaded here -->
+                    </div>
+                    
+                    <button class="slideshow-nav next" onclick="changeSlide(1)">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                
+                <div class="slideshow-counter" id="slideCounter">1 / 1</div>
+                
+                <div class="slideshow-dots" id="slideshowDots">
+                    <!-- Dots will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievement Slideshow Modal (Vertical) -->
+        <div id="achievementSlideshowModal" class="slideshow-modal achievement-modal">
+            <div class="slideshow-container vertical-container">
+                <button class="slideshow-close" onclick="closeAchievementSlideshow()">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <div class="slideshow-content vertical-content">
+                    <button class="slideshow-nav vertical-nav prev" onclick="changeAchievementSlide(-1)">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                    
+                    <div class="slideshow-slides vertical-slides" id="achievementSlideshowSlides">
+                        <!-- Achievement slides will be dynamically loaded here -->
+                    </div>
+                    
+                    <button class="slideshow-nav vertical-nav next" onclick="changeAchievementSlide(1)">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                
+                <div class="slideshow-counter" id="achievementSlideCounter">1 / 1</div>
+                
+                <div class="slideshow-dots vertical-dots" id="achievementSlideshowDots">
+                    <!-- Dots will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Certification Scroll Modal -->
+        <div id="certificationScrollModal" class="slideshow-modal certification-modal">
+            <div class="slideshow-container">
+                <button class="slideshow-close" onclick="closeCertificationScroll()">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <h2 class="modal-title">All Certifications</h2>
+                
+                <div class="certification-scroll-content" id="certificationScrollContent">
+                    <!-- Certification cards will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Leadership Slideshow Modal (Vertical) -->
+        <div id="leadershipSlideshowModal" class="slideshow-modal leadership-modal">
+            <div class="slideshow-container vertical-container">
+                <button class="slideshow-close" onclick="closeLeadershipSlideshow()">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <div class="slideshow-content vertical-content">
+                    <button class="slideshow-nav vertical-nav prev" onclick="changeLeadershipSlide(-1)">
+                        <i class="fas fa-chevron-up"></i>
+                    </button>
+                    
+                    <div class="slideshow-slides vertical-slides" id="leadershipSlideshowSlides">
+                        <!-- Leadership slides will be dynamically loaded here -->
+                    </div>
+                    
+                    <button class="slideshow-nav vertical-nav next" onclick="changeLeadershipSlide(1)">
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+                
+                <div class="slideshow-counter" id="leadershipSlideCounter">1 / 1</div>
+                
+                <div class="slideshow-dots vertical-dots" id="leadershipSlideshowDots">
+                    <!-- Dots will be dynamically loaded here -->
+                </div>
+            </div>
+        </div>
     </div> 
 
 
@@ -1898,7 +2024,499 @@
                 icon.classList.add('fa-chevron-down');
                 btnText.textContent = 'More Details';
             }
-        }        // Functions to call the generic loader
+        }
+
+        // Project Slideshow Functionality
+        let allProjectsData = [];
+        let currentSlideIndex = 0;
+
+        window.openProjectSlideshow = async function() {
+            try {
+                // Fetch all projects if not already loaded
+                if (allProjectsData.length === 0) {
+                    const querySnapshot = await db.collection('projects').get();
+                    allProjectsData = [];
+                    querySnapshot.forEach((doc) => {
+                        allProjectsData.push({ id: doc.id, ...doc.data() });
+                    });
+                }
+
+                if (allProjectsData.length === 0) {
+                    alert('No projects found!');
+                    return;
+                }
+
+                // Generate slides
+                const slidesContainer = document.getElementById('slideshowSlides');
+                const dotsContainer = document.getElementById('slideshowDots');
+                slidesContainer.innerHTML = '';
+                dotsContainer.innerHTML = '';
+
+                allProjectsData.forEach((project, index) => {
+                    // Create slide
+                    const slide = document.createElement('div');
+                    slide.className = 'slideshow-slide';
+                    if (index === 0) slide.classList.add('active');
+
+                    const technologies = Array.isArray(project.tech) 
+                        ? project.tech.join(', ') 
+                        : (project.tech || project.technologies || 'N/A');
+
+                    const imageUrl = project.imageUrl || 'assets/placeholder.jpg';
+                
+                slide.innerHTML = `
+                    <div class="slide-image">
+                        <img src="${imageUrl}" alt="${project.title}" onerror="this.src='assets/placeholder.jpg'">
+                    </div>
+                    <div class="slide-details">
+                        <h2>${project.title}</h2>
+                        <p class="slide-description">${project.description || ''}</p>
+                        <div class="slide-tech">
+                            <strong>Technologies:</strong> ${technologies}
+                        </div>
+                        ${project.githubUrl || project.liveUrl ? `
+                            <div class="slide-links">
+                                ${project.githubUrl ? `<a href="${project.githubUrl}" target="_blank" class="slide-btn"><i class="fab fa-github"></i> GitHub</a>` : ''}
+                                ${project.liveUrl ? `<a href="${project.liveUrl}" target="_blank" class="slide-btn"><i class="fas fa-external-link-alt"></i> Live Demo</a>` : ''}
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+                slidesContainer.appendChild(slide);
+
+                // Create dot
+                const dot = document.createElement('span');
+                dot.className = 'slideshow-dot';
+                if (index === 0) dot.classList.add('active');
+                dot.onclick = () => goToSlide(index);
+                dotsContainer.appendChild(dot);
+            });
+
+            currentSlideIndex = 0;
+            updateSlideCounter();
+            document.getElementById('projectSlideshowModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            } catch (error) {
+                console.error('Error loading slideshow:', error);
+                alert('Error loading projects. Please try again.');
+            }
+        }
+
+        window.closeProjectSlideshow = function() {
+            document.getElementById('projectSlideshowModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.changeSlide = function(direction) {
+            const slides = document.querySelectorAll('.slideshow-slide');
+            const dots = document.querySelectorAll('.slideshow-dot');
+            
+            slides[currentSlideIndex].classList.remove('active');
+            dots[currentSlideIndex].classList.remove('active');
+            
+            currentSlideIndex += direction;
+            
+            if (currentSlideIndex >= slides.length) {
+                currentSlideIndex = 0;
+            } else if (currentSlideIndex < 0) {
+                currentSlideIndex = slides.length - 1;
+            }
+            
+            slides[currentSlideIndex].classList.add('active');
+            dots[currentSlideIndex].classList.add('active');
+            updateSlideCounter();
+        }
+
+        window.goToSlide = function(index) {
+            const slides = document.querySelectorAll('.slideshow-slide');
+            const dots = document.querySelectorAll('.slideshow-dot');
+            
+            slides[currentSlideIndex].classList.remove('active');
+            dots[currentSlideIndex].classList.remove('active');
+            
+            currentSlideIndex = index;
+            
+            slides[currentSlideIndex].classList.add('active');
+            dots[currentSlideIndex].classList.add('active');
+            updateSlideCounter();
+        }
+
+        function updateSlideCounter() {
+            const counter = document.getElementById('slideCounter');
+            counter.textContent = `${currentSlideIndex + 1} / ${allProjectsData.length}`;
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            const projectModal = document.getElementById('projectSlideshowModal');
+            const achievementModal = document.getElementById('achievementSlideshowModal');
+            
+            if (projectModal.style.display === 'flex') {
+                if (e.key === 'ArrowLeft') changeSlide(-1);
+                if (e.key === 'ArrowRight') changeSlide(1);
+                if (e.key === 'Escape') closeProjectSlideshow();
+            }
+            
+            if (achievementModal.style.display === 'flex') {
+                if (e.key === 'ArrowUp') changeAchievementSlide(-1);
+                if (e.key === 'ArrowDown') changeAchievementSlide(1);
+                if (e.key === 'Escape') closeAchievementSlideshow();
+            }
+        });
+
+        // Achievement Slideshow Functionality (Vertical)
+        let allAchievementsData = [];
+        let currentAchievementSlideIndex = 0;
+
+        window.openAchievementSlideshow = async function() {
+            try {
+                // Fetch all achievements if not already loaded
+                if (allAchievementsData.length === 0) {
+                    const querySnapshot = await db.collection('achievements').get();
+                    allAchievementsData = [];
+                    querySnapshot.forEach((doc) => {
+                        allAchievementsData.push({ id: doc.id, ...doc.data() });
+                    });
+                }
+
+                if (allAchievementsData.length === 0) {
+                    alert('No achievements found!');
+                    return;
+                }
+
+                // Generate slides
+                const slidesContainer = document.getElementById('achievementSlideshowSlides');
+                const dotsContainer = document.getElementById('achievementSlideshowDots');
+                slidesContainer.innerHTML = '';
+                dotsContainer.innerHTML = '';
+
+                allAchievementsData.forEach((achievement, index) => {
+                    // Create slide
+                    const slide = document.createElement('div');
+                    slide.className = 'slideshow-slide vertical-slide';
+                    if (index === 0) slide.classList.add('active');
+
+                    const imageUrl = achievement.imageUrl || achievement.certificateUrl || 'assets/placeholder.jpg';
+                    
+                    slide.innerHTML = `
+                        <div class="vertical-slide-content">
+                            <div class="achievement-slide-image">
+                                <img src="${imageUrl}" alt="${achievement.title}" onerror="this.src='assets/placeholder.jpg'">
+                            </div>
+                            <div class="achievement-slide-details">
+                                <h2>${achievement.title}</h2>
+                                <p class="achievement-slide-description">${achievement.description || ''}</p>
+                                ${achievement.date ? `<p class="achievement-slide-date"><i class="fas fa-calendar"></i> ${achievement.date}</p>` : ''}
+                                ${achievement.organization ? `<p class="achievement-slide-org"><i class="fas fa-building"></i> ${achievement.organization}</p>` : ''}
+                                ${achievement.certificateUrl ? `
+                                    <div class="achievement-slide-links">
+                                        <a href="${achievement.certificateUrl}" target="_blank" class="slide-btn">
+                                            <i class="fas fa-certificate"></i> View Certificate
+                                        </a>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                    slidesContainer.appendChild(slide);
+
+                    // Create dot
+                    const dot = document.createElement('span');
+                    dot.className = 'slideshow-dot';
+                    if (index === 0) dot.classList.add('active');
+                    dot.onclick = () => goToAchievementSlide(index);
+                    dotsContainer.appendChild(dot);
+                });
+
+                currentAchievementSlideIndex = 0;
+                updateAchievementSlideCounter();
+                document.getElementById('achievementSlideshowModal').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            } catch (error) {
+                console.error('Error loading achievement slideshow:', error);
+                alert('Error loading achievements. Please try again.');
+            }
+        }
+
+        window.closeAchievementSlideshow = function() {
+            document.getElementById('achievementSlideshowModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.changeAchievementSlide = function(direction) {
+            const slides = document.querySelectorAll('.vertical-slide');
+            const dots = document.querySelectorAll('#achievementSlideshowDots .slideshow-dot');
+            
+            slides[currentAchievementSlideIndex].classList.remove('active');
+            dots[currentAchievementSlideIndex].classList.remove('active');
+            
+            currentAchievementSlideIndex += direction;
+            
+            if (currentAchievementSlideIndex >= slides.length) {
+                currentAchievementSlideIndex = 0;
+            } else if (currentAchievementSlideIndex < 0) {
+                currentAchievementSlideIndex = slides.length - 1;
+            }
+            
+            slides[currentAchievementSlideIndex].classList.add('active');
+            dots[currentAchievementSlideIndex].classList.add('active');
+            updateAchievementSlideCounter();
+        }
+
+        window.goToAchievementSlide = function(index) {
+            const slides = document.querySelectorAll('.vertical-slide');
+            const dots = document.querySelectorAll('#achievementSlideshowDots .slideshow-dot');
+            
+            slides[currentAchievementSlideIndex].classList.remove('active');
+            dots[currentAchievementSlideIndex].classList.remove('active');
+            
+            currentAchievementSlideIndex = index;
+            
+            slides[currentAchievementSlideIndex].classList.add('active');
+            dots[currentAchievementSlideIndex].classList.add('active');
+            updateAchievementSlideCounter();
+        }
+
+        function updateAchievementSlideCounter() {
+            const counter = document.getElementById('achievementSlideCounter');
+            counter.textContent = `${currentAchievementSlideIndex + 1} / ${allAchievementsData.length}`;
+        }
+
+        // Certification Scroll Functionality
+        let allCertificationsData = [];
+
+        window.openCertificationScroll = async function() {
+            try {
+                // Fetch all certifications if not already loaded
+                if (allCertificationsData.length === 0) {
+                    const querySnapshot = await db.collection('Certifications').get();
+                    allCertificationsData = [];
+                    querySnapshot.forEach((doc) => {
+                        allCertificationsData.push({ id: doc.id, ...doc.data() });
+                    });
+                }
+
+                console.log('Certifications data:', allCertificationsData); // Debug log
+
+                if (allCertificationsData.length === 0) {
+                    alert('No certifications found!');
+                    return;
+                }
+
+                // Generate certification cards
+                const scrollContainer = document.getElementById('certificationScrollContent');
+                scrollContainer.innerHTML = '';
+
+                allCertificationsData.forEach((cert, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'certification-scroll-card';
+                    card.style.animationDelay = `${index * 0.1}s`;
+
+                    // Handle different possible field names - match the renderCertification function
+                    const title = cert.title || cert.name || 'Untitled Certification';
+                    let imageUrl = cert.certificateImage || cert.imageUrl || cert.image || '';
+                    
+                    // Handle relative paths for images
+                    if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/') && !imageUrl.startsWith('data:')) {
+                        imageUrl = `assets/certifications/${imageUrl}`;
+                    }
+                    
+                    if (!imageUrl) {
+                        imageUrl = 'assets/placeholder.jpg';
+                    }
+                    
+                    const issuer = cert.issuer || cert.organization || cert.issuedBy || '';
+                    const date = cert.date || cert.issueDate || cert.completionDate || '';
+                    const description = cert.description || cert.details || '';
+                    const certUrl = cert.certificateUrl || cert.url || cert.link || '';
+                    
+                    card.innerHTML = `
+                        <div class="cert-scroll-image">
+                            <img src="${imageUrl}" alt="${title}" onerror="this.src='assets/placeholder.jpg'">
+                        </div>
+                        <div class="cert-scroll-details">
+                            <h3>${title}</h3>
+                            ${issuer ? `<p class="cert-scroll-issuer"><i class="fas fa-building"></i> ${issuer}</p>` : ''}
+                            ${date ? `<p class="cert-scroll-date"><i class="fas fa-calendar"></i> ${date}</p>` : ''}
+                            ${description ? `<p class="cert-scroll-description">${description}</p>` : ''}
+                            ${certUrl ? `
+                                <a href="${certUrl}" target="_blank" class="cert-scroll-btn">
+                                    <i class="fas fa-external-link-alt"></i> View Certificate
+                                </a>
+                            ` : ''}
+                        </div>
+                    `;
+                    scrollContainer.appendChild(card);
+                });
+
+                document.getElementById('certificationScrollModal').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            } catch (error) {
+                console.error('Error loading certifications:', error);
+                alert('Error loading certifications. Please try again.');
+            }
+        }
+
+        window.closeCertificationScroll = function() {
+            document.getElementById('certificationScrollModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            const certModal = document.getElementById('certificationScrollModal');
+            if (certModal && certModal.style.display === 'flex' && e.key === 'Escape') {
+                closeCertificationScroll();
+            }
+        });
+
+        // Leadership Slideshow Functionality (Vertical)
+        let allLeadershipData = [];
+        let currentLeadershipSlideIndex = 0;
+
+        window.openLeadershipSlideshow = async function() {
+            try {
+                // Fetch all leadership items if not already loaded
+                if (allLeadershipData.length === 0) {
+                    const querySnapshot = await db.collection('leadership').get();
+                    allLeadershipData = [];
+                    querySnapshot.forEach((doc) => {
+                        allLeadershipData.push({ id: doc.id, ...doc.data() });
+                    });
+                }
+
+                if (allLeadershipData.length === 0) {
+                    alert('No leadership items found!');
+                    return;
+                }
+
+                // Generate slides
+                const slidesContainer = document.getElementById('leadershipSlideshowSlides');
+                const dotsContainer = document.getElementById('leadershipSlideshowDots');
+                slidesContainer.innerHTML = '';
+                dotsContainer.innerHTML = '';
+
+                allLeadershipData.forEach((item, index) => {
+                    // Create slide
+                    const slide = document.createElement('div');
+                    slide.className = 'slideshow-slide vertical-slide';
+                    if (index === 0) slide.classList.add('active');
+
+                    let imageUrl = item.imageUrl || '';
+                    if (imageUrl && !imageUrl.startsWith('http') && !imageUrl.startsWith('/') && !imageUrl.startsWith('data:')) {
+                        imageUrl = `assets/leadership/${imageUrl}`;
+                    }
+
+                    const imageSection = imageUrl ? `
+                        <div class="leadership-slide-image">
+                            <img src="${imageUrl}" alt="${item.title}" onerror="this.style.display='none'">
+                        </div>
+                    ` : '';
+
+                    // Format responsibilities
+                    let responsibilitiesHTML = '';
+                    if (item.keyResponsibilities) {
+                        const responsibilities = Array.isArray(item.keyResponsibilities) 
+                            ? item.keyResponsibilities 
+                            : item.keyResponsibilities.split(',').map(r => r.trim());
+                        
+                        responsibilitiesHTML = `
+                            <div class="leadership-responsibilities">
+                                <h4><i class="fas fa-tasks"></i> Key Responsibilities</h4>
+                                <ul>
+                                    ${responsibilities.map(resp => `<li>${resp}</li>`).join('')}
+                                </ul>
+                            </div>
+                        `;
+                    }
+                    
+                    slide.innerHTML = `
+                        <div class="vertical-slide-content">
+                            ${imageSection}
+                            <div class="leadership-slide-details">
+                                <h2>${item.title}</h2>
+                                <p class="leadership-slide-org"><i class="fas fa-building"></i> ${item.organization || ''}</p>
+                                ${item.duration ? `<p class="leadership-slide-duration"><i class="fas fa-calendar"></i> ${item.duration}</p>` : ''}
+                                ${item.description ? `<p class="leadership-slide-description">${item.description}</p>` : ''}
+                                ${responsibilitiesHTML}
+                            </div>
+                        </div>
+                    `;
+                    slidesContainer.appendChild(slide);
+
+                    // Create dot
+                    const dot = document.createElement('span');
+                    dot.className = 'slideshow-dot';
+                    if (index === 0) dot.classList.add('active');
+                    dot.onclick = () => goToLeadershipSlide(index);
+                    dotsContainer.appendChild(dot);
+                });
+
+                currentLeadershipSlideIndex = 0;
+                updateLeadershipSlideCounter();
+                document.getElementById('leadershipSlideshowModal').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            } catch (error) {
+                console.error('Error loading leadership slideshow:', error);
+                alert('Error loading leadership items. Please try again.');
+            }
+        }
+
+        window.closeLeadershipSlideshow = function() {
+            document.getElementById('leadershipSlideshowModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        window.changeLeadershipSlide = function(direction) {
+            const slides = document.querySelectorAll('#leadershipSlideshowSlides .vertical-slide');
+            const dots = document.querySelectorAll('#leadershipSlideshowDots .slideshow-dot');
+            
+            slides[currentLeadershipSlideIndex].classList.remove('active');
+            dots[currentLeadershipSlideIndex].classList.remove('active');
+            
+            currentLeadershipSlideIndex += direction;
+            
+            if (currentLeadershipSlideIndex >= slides.length) {
+                currentLeadershipSlideIndex = 0;
+            } else if (currentLeadershipSlideIndex < 0) {
+                currentLeadershipSlideIndex = slides.length - 1;
+            }
+            
+            slides[currentLeadershipSlideIndex].classList.add('active');
+            dots[currentLeadershipSlideIndex].classList.add('active');
+            updateLeadershipSlideCounter();
+        }
+
+        window.goToLeadershipSlide = function(index) {
+            const slides = document.querySelectorAll('#leadershipSlideshowSlides .vertical-slide');
+            const dots = document.querySelectorAll('#leadershipSlideshowDots .slideshow-dot');
+            
+            slides[currentLeadershipSlideIndex].classList.remove('active');
+            dots[currentLeadershipSlideIndex].classList.remove('active');
+            
+            currentLeadershipSlideIndex = index;
+            
+            slides[currentLeadershipSlideIndex].classList.add('active');
+            dots[currentLeadershipSlideIndex].classList.add('active');
+            updateLeadershipSlideCounter();
+        }
+
+        function updateLeadershipSlideCounter() {
+            const counter = document.getElementById('leadershipSlideCounter');
+            counter.textContent = `${currentLeadershipSlideIndex + 1} / ${allLeadershipData.length}`;
+        }
+
+        // Keyboard navigation for leadership slideshow
+        document.addEventListener('keydown', function(e) {
+            const leadershipModal = document.getElementById('leadershipSlideshowModal');
+            if (leadershipModal && leadershipModal.style.display === 'flex') {
+                if (e.key === 'ArrowUp') changeLeadershipSlide(-1);
+                if (e.key === 'ArrowDown') changeLeadershipSlide(1);
+                if (e.key === 'Escape') closeLeadershipSlideshow();
+            }
+        });
+
+        // Functions to call the generic loader
         const loadExperiences = (isAdmin) => loadData('experience', 'experience-list', renderExperience, isAdmin); 
         const loadProjects = (isAdmin) => loadData('projects', 'projects-list', renderProject, isAdmin);
         const loadEducation = (isAdmin) => loadData('education', 'education-list', renderEducation, isAdmin);
